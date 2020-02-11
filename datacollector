@@ -1,0 +1,26 @@
+import threading, time, queue, database
+
+# Data collector file: contains datacollector function; 
+
+
+# Data collector layer: collects data from sensors by way of the serial
+#   connection with the Arduino (the Arduino is used the gather analog
+#   data, which the RaspberryPi is unable to do itself without the aid
+#   of an external converter).
+def dataCollector(dbQueue,MAX_GRANULARITY,dcEnabled):
+    # Global DBQueue        # Send input tasks to the database layer
+    # Global max_granularity
+    # Global collect_data
+
+    # Read sensor data from the connected arduino
+    def read_serial():
+        "get data from the arduino"
+        # return data
+            
+    while(True): # The dataCollector thread is always running
+        while(dcEnabled): # Only collects and sends data when enabled
+            if(collect_data):
+                time.sleep(float(max_granularity/2))
+                data = read_serial()
+                insert = database.InsertTask(data)
+                dbQueue.put(insert,block=True,timeout=max_granularity/2)
