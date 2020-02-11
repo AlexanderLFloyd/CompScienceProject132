@@ -1,0 +1,28 @@
+import threading, time, queue, database, datacollector
+
+# Main thread (foreground): contains the GUI, user controls.
+
+
+# Global variables
+#
+# Data collector/User Thread -> Database Queue
+dbQueue = queue.SimpleQueue()   # SimpleQueue is an unbounded, thread-safe queue              
+returnQueue = queue.SimpleQueue()# Database -> User Thread Queue
+
+# The max granularity of the collected data in seconds
+MAX_GRANULARITY = 30
+
+# Allows the user to enable/disable database and datacollector
+dbEnabled = False # Database enabled
+dcEnabled = False # Datacollector enabled
+
+
+if(__name__=="__main__"):
+    # Start database thread
+    dbThread = threading.Thread(target=database.databaseConnector,args=(dbQueue,returnQueue,dbEnabled))
+    dbThread.start()
+    # Start data collector thread
+    collectorThread = threading.Thread(target=datacollector.dataCollector,args=(dbQueue,MAX_GRANULARITY,dcEnabled))
+    collectorThread.start()
+
+    # GUI, user control here
